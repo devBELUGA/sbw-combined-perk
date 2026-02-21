@@ -12,6 +12,32 @@ This mod adds perk combination and split workflows for SBW:
 - split a **Perk Folder** or **Combined Perk** back into separate perks
 - apply a **Combined Perk** on the Reforging Table
 
+## GIF Preview
+
+### 1) Split Perk Folder
+
+![Split Perk Folder](https://cdn.modrinth.com/data/BGK8soKH/images/eb11e000ff38d18090d3636445ff33696ba78f54.gif)
+
+### 2) Split Combined Perk
+
+![Split Combined Perk](https://cdn.modrinth.com/data/BGK8soKH/images/472d126f1bdbc9127652c208d37c2084bda97077.gif)
+
+### 3) Combine Same-Type Perks
+
+![Combine Same-Type Perks](https://cdn.modrinth.com/data/BGK8soKH/images/dcd2f5fada6b254746c259a74f9970624d3c0d88.gif)
+
+### 4) Combine Different-Type Perks into Folder
+
+![Combine Different-Type Perks into Folder](https://cdn.modrinth.com/data/BGK8soKH/images/350e5cb1d266c4b2f383935d32f0b10a102fa890.gif)
+
+### 5) Apply Perk Folder to Gun (Anvil)
+
+![Apply Perk Folder to Gun](https://cdn.modrinth.com/data/BGK8soKH/images/3b6b8bd860100a077e3aa49d8295762fe67e8d91.gif)
+
+### 6) Apply Combined Perk on Reforging Table
+
+![Apply Combined Perk on Reforging Table](https://cdn.modrinth.com/data/BGK8soKH/images/7f7da44e8cfd27624aaba5da0c48e9a89bf91d4e.gif)
+
 ## Gameplay Rules
 
 ### Combine in anvil

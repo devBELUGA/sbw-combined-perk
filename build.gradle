@@ -13,9 +13,14 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'com.modrinth.minotaur' version '2.+'
 }
 
 apply plugin: 'org.spongepowered.mixin'
+
+if (file("secret.gradle").exists()) {
+    apply from: "secret.gradle"
+}
 
 group = mod_group_id
 version = mod_version
@@ -208,4 +213,96 @@ tasks.named('jar', Jar).configure {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+def readFileIfExists = { String path ->
+    File file = file(path)
+    return file.exists() ? file.getText('UTF-8') : null
+}
+
+def readFirstLineIfExists = { String path ->
+    String text = readFileIfExists(path)
+    if (text == null) {
+        return null
+    }
+    String firstLine = text.readLines().find { !it.trim().isEmpty() }
+    return firstLine == null ? null : firstLine.trim()
+}
+
+def secretModrinthToken = (findProperty("secret_modrinth_token") ?: "").toString().trim()
+def secretModrinthProjectId = (findProperty("secret_modrinth_project_id") ?: "").toString().trim()
+
+def modrinthTokenResolved = (findProperty("modrinth_token") ?: System.getenv("MODRINTH_TOKEN") ?: secretModrinthToken)?.toString()?.trim()
+if (modrinthTokenResolved != null && modrinthTokenResolved.isEmpty()) {
+    modrinthTokenResolved = null
+}
+
+def modrinthProjectIdResolved = (findProperty("modrinth_project_id") ?: secretModrinthProjectId)?.toString()?.trim()
+if (modrinthProjectIdResolved != null && modrinthProjectIdResolved.isEmpty()) {
+    modrinthProjectIdResolved = null
+}
+
+def modrinthVersionTypeProvider = providers.gradleProperty("modrinth_version_type").orElse("release")
+
+modrinth {
+    token = modrinthTokenResolved
+    projectId = modrinthProjectIdResolved
+    versionNumber = "${mod_version}"
+    versionType = modrinthVersionTypeProvider.get()
+    versionName = readFirstLineIfExists("upd_name.md") ?: "${mod_name} ${mod_version}"
+    changelog = readFileIfExists("upd_desc.md") ?: "No changelog provided."
+    uploadFile = tasks.jar
+    gameVersions = [minecraft_version]
+    loaders = ["forge"]
+}
+
+ext.modrinthPublishApproved = false
+
+tasks.register("confirmModrinthPublish") {
+    group = "publishing"
+    description = "Ask for confirmation before publishing to Modrinth."
+
+    doLast {
+        String answer = null
+        java.io.Console console = System.console()
+        if (console != null) {
+            answer = console.readLine("Publish to Modrinth now? [Y/N] (default N): ")
+        }
+        if (answer == null) {
+            print("Publish to Modrinth now? [Y/N] (default N): ")
+            System.out.flush()
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
+            answer = reader.readLine()
+        }
+
+        project.ext.modrinthPublishApproved = answer != null && answer.trim().equalsIgnoreCase("y")
+        if (project.ext.modrinthPublishApproved) {
+            println("Modrinth publish confirmed.")
+        } else {
+            println("Modrinth publish canceled.")
+        }
+    }
+}
+
+tasks.named("modrinth").configure {
+    group = "publishing"
+    dependsOn tasks.named("build")
+    dependsOn tasks.named("reobfJar")
+    dependsOn tasks.named("confirmModrinthPublish")
+    onlyIf { project.ext.modrinthPublishApproved }
+
+    doFirst {
+        if (modrinthProjectIdResolved == null) {
+            throw new GradleException("Modrinth project ID is missing. Set secret_modrinth_project_id in secret.gradle or -Pmodrinth_project_id=...")
+        }
+        if (modrinthTokenResolved == null) {
+            throw new GradleException("Modrinth token is missing. Set secret_modrinth_token in secret.gradle, MODRINTH_TOKEN, or -Pmodrinth_token=...")
+        }
+    }
+}
+
+tasks.register("publishToModrinth") {
+    group = "publishing"
+    description = "Build and publish to Modrinth with required confirmation."
+    dependsOn tasks.named("modrinth")
 }

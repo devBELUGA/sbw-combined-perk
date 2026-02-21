@@ -43,3 +43,6 @@ $RECYCLE.BIN/
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
 libs/*.jar
+
+# Local secrets
+secret.gradle

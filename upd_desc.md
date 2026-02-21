@@ -1,11 +1,10 @@
-First build of the SBW Combined Perk addon.
+Build and release pipeline update.
 
 Added:
 
-- merge same-type perks into a combined perk in the anvil
-- merge different-type perks into a perk folder in the anvil
-- apply a perk folder to a gun in the anvil
-- split a perk folder in the anvil
-- split a combined perk in the anvil
-- split rules: slot 1 must be empty, item goes to slot 2, take output with Shift + LMB
-- split uses grindstone sound and refunds consumed XP
+- Gradle task `publishToModrinth` for Modrinth publishing
+- interactive publish confirmation in console: `Y` to publish, `N` to cancel
+- local secrets support via `secret.gradle` (ignored by git)
+- committed template `secret.gradle.placeholder`
+- updated GitHub workflows to Java 21
+- dependency graph submission enabled in workflows

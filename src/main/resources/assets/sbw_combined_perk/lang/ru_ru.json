@@ -1,0 +1,7 @@
+{
+  "tooltip.sbw_combined_perk.combined_title": "Совмещенные перки",
+  "tooltip.sbw_combined_perk.folder_title": "Папка перков",
+  "tooltip.sbw_combined_perk.weapon_extra_title": "Дополнительные совмещенные перки",
+  "item.sbw_combined_perk.perk_folder": "Папка перков",
+  "message.sbw_combined_perk.split_pickup_hint": "[SBW] Зажми Shift и ЛКМ по выходному слоту, чтобы получить разъединенные перки."
+}

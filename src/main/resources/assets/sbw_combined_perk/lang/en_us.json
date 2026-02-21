@@ -1,0 +1,7 @@
+{
+  "tooltip.sbw_combined_perk.combined_title": "Combined Perks",
+  "tooltip.sbw_combined_perk.folder_title": "Perk Folder",
+  "tooltip.sbw_combined_perk.weapon_extra_title": "Extra Combined Perks",
+  "item.sbw_combined_perk.perk_folder": "Perk Folder",
+  "message.sbw_combined_perk.split_pickup_hint": "[SBW] Hold Shift and Left Click (LMB) the output slot to extract split perks."
+}

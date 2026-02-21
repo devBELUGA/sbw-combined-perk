@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.raiver.sbw_combined_perk.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "sbw_combined_perk.refmap.json",
+  "mixins": [
+    "AnvilMenuCreateSplitResultMixin",
+    "AnvilMenuSplitEffectsMixin",
+    "AnvilMenuSplitPickupMixin",
+    "CustomEventHandlerCombinedPerkMixin",
+    "GunDataCombinedPerkMixin",
+    "GunEventHandlerCombinedPerkMixin",
+    "GunItemCombinedPerkMixin",
+    "ItemCombinerMenuAccessor",
+    "LivingEventHandlerCombinedPerkMixin",
+    "ReforgingTableMenuCombinedPerkMixin"
+  ],
+  "client": [
+    "ClientEventHandlerCombinedPerkMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

@@ -1,0 +1,45 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+
+# Gradle
+.gradle/
+build/
+**/build/
+out/
+
+# Forge run dirs
+run/
+runs/
+run-data/
+
+# Logs and crash dumps
+logs/
+crash-reports/
+*.log
+hs_err_pid*
+replay_pid*
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temp files
+*~
+*.tmp
+*.swp
+*.swo
+*.orig
+
+# Local dependency jars and exported artifacts
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+libs/*.jar

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sbw_combined_perk:item/folderperk"
+  }
+}

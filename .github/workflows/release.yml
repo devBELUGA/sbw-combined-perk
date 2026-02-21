@@ -1,0 +1,86 @@
+name: Build And Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (example: v1.0.1)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew clean build --no-daemon
+
+      - name: Resolve release data
+        id: meta
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            tag="${{ github.event.inputs.tag }}"
+          else
+            tag="${GITHUB_REF_NAME}"
+          fi
+
+          jar_path="$(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' | head -n 1)"
+          if [[ -z "${jar_path}" ]]; then
+            echo "No jar found in build/libs"
+            exit 1
+          fi
+
+          if [[ -f upd_name.md ]] && [[ -n "$(tr -d '[:space:]' < upd_name.md)" ]]; then
+            release_name="$(cat upd_name.md)"
+          else
+            release_name="Release ${tag}"
+          fi
+
+          if [[ -f upd_desc.md ]] && [[ -n "$(tr -d '[:space:]' < upd_desc.md)" ]]; then
+            {
+              echo "release_body<<EOF"
+              cat upd_desc.md
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            {
+              echo "release_body<<EOF"
+              echo "Automated release for ${tag}"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "jar_path=${jar_path}" >> "$GITHUB_OUTPUT"
+          echo "release_name=${release_name}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: ${{ steps.meta.outputs.release_name }}
+          body: ${{ steps.meta.outputs.release_body }}
+          files: ${{ steps.meta.outputs.jar_path }}
+          draft: false
+          prerelease: false

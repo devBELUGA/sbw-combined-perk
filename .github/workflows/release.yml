@@ -22,6 +22,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Download SBW dependency jar for CI
+        run: |
+          mkdir -p libs
+          curl -fL "https://cdn.modrinth.com/data/Cd3DYqzn/versions/DdiwkiSV/superbwarfare-1.20.1-0.8.8-final-6a6b54795.jar" -o libs/superbwarfare-1.20.1.jar
+
       - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
